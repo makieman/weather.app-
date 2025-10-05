@@ -1,1 +1,39 @@
-<app-weather></app-weather>
+<div class="outer-container" [style.backgroundImage]="'url(' + backgroundUrl + ')'">
+<div class="ambient" aria-hidden="true"></div>
+
+<div class="container" [ngClass]="themeClass">
+  <div class="weather-card">
+    <div class="top-controls">
+      <button class="theme-toggle" (click)="toggleTheme()" aria-label="Toggle theme">🌗</button>
+    </div>
+
+    <div class="search-container">
+      <input type="text"
+             [(ngModel)]="cityName"
+             placeholder="Enter city name"
+             (keyup.enter)="getWeather()"
+             aria-label="City name">
+      <button (click)="getWeather()" aria-label="Search weather">Search</button>
+    </div>
+<div class="raindrops"></div>
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner" role="status" aria-live="polite" aria-label="Loading"></div>
+    </div>
+
+    <div *ngIf="weatherData" class="weather-info">
+      <img *ngIf="weatherData.weather?.[0]?.icon" 
+           class="icon" 
+           [src]="'https://openweathermap.org/img/wn/' + weatherData.weather[0].icon + '@2x.png'"
+           [alt]="weatherData.weather[0].description + ' icon'">
+      <h2>{{ weatherData.name }}</h2>
+      <p class="temperature" [class.animate]="animateTemp">{{ weatherData.main.temp | number:'1.0-0' }}°C</p>
+      <p class="description">{{ weatherData.weather[0].description }}</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      <p>{{ error }}</p>
+    </div>
+  </div>
+</div>
+</div>
+
