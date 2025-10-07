@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environment';
+import { PixabayResponse } from './pixabay.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,14 @@ export class ImageService {
 
   constructor(private http: HttpClient) { }
 
-  getImage(city: string): Observable<any> {
-    const params = {
-      key: environment.pixabayApiKey,
-      q: city,
-      image_type: 'photo',
-      category: 'places',
-      per_page: '3'
-    };
-    return this.http.get(this.pixabayApiUrl, { params });
+  getImage(city: string): Observable<PixabayResponse> {
+    const params = new HttpParams()
+      .set('key', environment.pixabayApiKey)
+      .set('q', city)
+      .set('image_type', 'photo')
+      .set('category', 'places')
+      .set('per_page', '3');
+
+    return this.http.get<PixabayResponse>(this.pixabayApiUrl, { params });
   }
 }
